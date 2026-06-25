@@ -4,6 +4,7 @@ import Image from "next/image";
 export const bannerGradients: Record<string, string> = {
   all: "linear-gradient(125deg,#FC8EAC 0%,#F76C9C 50%,#7A2E45 100%)",
   bedsheets: "linear-gradient(125deg,#FC8EAC 0%,#F76C9C 55%,#7A2E45 100%)",
+  dohar: "linear-gradient(125deg,#FBA6C2 0%,#F076A0 55%,#7A2E45 100%)",
   cushions: "linear-gradient(125deg,#F58BAC 0%,#9A4760 100%)",
   suits: "linear-gradient(125deg,#9A4760 0%,#7A2E45 100%)",
   shirts: "linear-gradient(125deg,#7A2E45 0%,#5F2335 100%)",

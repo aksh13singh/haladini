@@ -25,7 +25,7 @@ export function ShopByCategory() {
         </div>
 
         {/* Snap-scroll row on mobile → 4-col grid on desktop */}
-        <div className="scrollbar-hide mt-8 grid auto-cols-[78%] grid-flow-col gap-4 overflow-x-auto snap-x snap-mandatory pb-2 sm:auto-cols-[44%] md:grid-flow-row md:grid-cols-4 md:gap-5 md:overflow-visible">
+        <div className="scrollbar-hide mt-8 grid auto-cols-[78%] grid-flow-col gap-4 overflow-x-auto snap-x snap-mandatory pb-2 sm:auto-cols-[44%] md:grid-flow-row md:grid-cols-3 md:gap-5 md:overflow-visible lg:grid-cols-5">
           {categories.map((category) => (
             <CategoryCard key={category.slug} category={category} />
           ))}

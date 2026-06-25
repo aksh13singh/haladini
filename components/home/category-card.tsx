@@ -7,6 +7,7 @@ import type { Category } from "@/lib/site-config";
 /** Distinct-but-cohesive flamingo→wine gradients per category. */
 const cardGradient: Record<string, string> = {
   bedsheets: "linear-gradient(155deg,#FFE9F0 0%,#FC8EAC 100%)",
+  dohar: "linear-gradient(155deg,#FFD2E1 0%,#F076A0 100%)",
   cushions: "linear-gradient(155deg,#FC8EAC 0%,#9A4760 100%)",
   suits: "linear-gradient(155deg,#F76C9C 0%,#7A2E45 100%)",
   shirts: "linear-gradient(155deg,#9A4760 0%,#5F2335 100%)",

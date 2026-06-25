@@ -56,10 +56,25 @@ export const categories: Category[] = [
     ],
   },
   {
+    name: "Dohar",
+    slug: "dohar",
+    href: "/shop/dohar",
+    blurb:
+      "Lightweight block-print cotton dohars — soft, breathable layering for every season.",
+  },
+  {
     name: "Cushions",
     slug: "cushions",
     href: "/shop/cushions",
     blurb: "Hand-finished cushion covers to layer your living space.",
+    subcategories: [
+      {
+        name: "Table Cloth",
+        slug: "table-cloth",
+        blurb:
+          "Block-print cotton table linen to dress your dining table beautifully.",
+      },
+    ],
   },
   {
     name: "Suits",
@@ -86,7 +101,14 @@ export const mainNav: NavLink[] = [
       { label: "Handblock Print", href: "/shop/bedsheets/handblock-print" },
     ],
   },
-  { label: "Cushions", href: "/shop/cushions" },
+  { label: "Dohar", href: "/shop/dohar" },
+  {
+    label: "Cushions",
+    href: "/shop/cushions",
+    children: [
+      { label: "Table Cloth", href: "/shop/cushions/table-cloth" },
+    ],
+  },
   { label: "Suits", href: "/shop/suits" },
   { label: "Shirts", href: "/shop/shirts" },
   { label: "About", href: "/about" },
