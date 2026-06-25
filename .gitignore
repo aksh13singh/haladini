@@ -5,8 +5,12 @@
 
 # next.js
 /.next/
+/.next-dev/
 /out/
 next-env.d.ts
+
+# codex / alternate dev-server artifacts
+/.codex-dev/
 
 # production
 /build

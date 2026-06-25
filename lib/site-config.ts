@@ -81,6 +81,7 @@ export const categories: Category[] = [
     slug: "suits",
     href: "/shop/suits",
     blurb: "Elegant block-print suit sets in soft, natural fabrics.",
+    image: "/categories/suits.jpeg",
   },
   {
     name: "Shirts",
