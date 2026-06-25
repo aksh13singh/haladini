@@ -64,6 +64,7 @@ export const categories: Category[] = [
     href: "/shop/dohar",
     blurb:
       "Lightweight block-print cotton dohars — soft, breathable layering for every season.",
+    image: "/categories/dohar.png",
   },
   {
     name: "Cushions",
@@ -93,6 +94,7 @@ export const categories: Category[] = [
     slug: "shirts",
     href: "/shop/shirts",
     blurb: "Relaxed block-print shirts, made for everyday ease.",
+    image: "/categories/shirts.png",
   },
 ];
 
