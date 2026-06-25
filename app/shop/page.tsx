@@ -37,6 +37,7 @@ export default async function ShopPage({
         category="all"
         title="Shop All"
         tagline="Handcrafted block-print home & fashion, made in Jaipur."
+        image="/categories/shop-all.jpeg"
       />
 
       <div className="container section">

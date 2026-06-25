@@ -70,12 +70,14 @@ export const categories: Category[] = [
     slug: "cushions",
     href: "/shop/cushions",
     blurb: "Hand-finished cushion covers to layer your living space.",
+    image: "/categories/cushions.jpeg",
     subcategories: [
       {
         name: "Table Cloth",
         slug: "table-cloth",
         blurb:
           "Block-print cotton table linen to dress your dining table beautifully.",
+        image: "/categories/table-cloth.jpeg",
       },
     ],
   },
