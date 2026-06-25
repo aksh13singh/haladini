@@ -61,7 +61,7 @@ export function HeroVideoBackground({
           muted
           loop
           playsInline
-          preload="auto"
+          preload="none"
           poster={poster}
           aria-hidden="true"
           className="absolute inset-0 h-full w-full object-cover"
