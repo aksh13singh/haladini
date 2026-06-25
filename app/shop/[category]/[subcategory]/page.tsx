@@ -69,7 +69,7 @@ export default async function SubcategoryPage({
         eyebrow={cat.name}
         title={sub.name}
         tagline={sub.blurb ?? cat.blurb}
-        image={cat.image}
+        image={sub.image ?? cat.image}
       />
 
       <div className="container section">

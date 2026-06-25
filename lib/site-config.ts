@@ -36,8 +36,9 @@ export type Category = {
    *  branded gradient card when omitted. */
   image?: string;
   /** Optional subcategories — shown as a nav dropdown + chips on the category
-   *  page, each with its own /shop/<category>/<subcategory> page. */
-  subcategories?: { name: string; slug: string; blurb?: string }[];
+   *  page, each with its own /shop/<category>/<subcategory> page. Each may set
+   *  its own banner `image`; otherwise it inherits the parent category's. */
+  subcategories?: { name: string; slug: string; blurb?: string; image?: string }[];
 };
 
 export const categories: Category[] = [
@@ -53,6 +54,7 @@ export const categories: Category[] = [
         slug: "handblock-print",
         blurb:
           "Bedsheets hand block-printed by Jaipur artisans, in natural dyes.",
+        image: "/categories/handblock-print.jpeg",
       },
     ],
   },
