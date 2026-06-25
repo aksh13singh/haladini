@@ -1,0 +1,150 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --font-poppins: "Poppins", system-ui, sans-serif;
+    --font-fraunces: "Fraunces", Georgia, serif;
+
+    /* Brand tokens exposed as CSS vars for non-Tailwind usage */
+    --canvas: #ffffff;
+    --cream: #fff7fa;
+    --flamingo: #fc8eac;
+    --flamingo-deep: #f76c9c;
+    --flamingo-tint: #ffe9f0;
+    --wine: #7a2e45;
+    --ink: #1f1a1c;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-canvas text-ink font-sans antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* Editorial serif display defaults */
+  .font-display {
+    font-family: var(--font-fraunces);
+    font-optical-sizing: auto;
+    letter-spacing: -0.01em;
+  }
+
+  ::selection {
+    background-color: #ffe9f0;
+    color: #7a2e45;
+  }
+
+  /* Branded focus ring */
+  :focus-visible {
+    outline: 2px solid var(--flamingo-deep);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Reusable section + heading helpers */
+  .section {
+    @apply py-14 md:py-20 lg:py-24;
+  }
+
+  .display-heading {
+    @apply font-display font-semibold text-wine leading-[1.05] tracking-tight;
+  }
+
+  .eyebrow {
+    @apply text-xs font-semibold uppercase tracking-[0.22em] text-flamingo-deep;
+  }
+
+  /* Thin custom scrollbar for horizontal scroll rows */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer utilities {
+  /* Pause marquee animation on hover */
+  .pause-on-hover:hover {
+    animation-play-state: paused;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+/* ── Hero animated brand gradient (also the graceful video fallback) ── */
+.hero-aurora {
+  background-color: #fff7fa;
+  background-image:
+    radial-gradient(
+      55% 75% at 18% 22%,
+      rgba(255, 233, 240, 0.95) 0%,
+      transparent 60%
+    ),
+    radial-gradient(
+      50% 70% at 82% 26%,
+      rgba(252, 142, 172, 0.6) 0%,
+      transparent 58%
+    ),
+    radial-gradient(
+      65% 85% at 68% 92%,
+      rgba(122, 46, 69, 0.4) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      45% 60% at 32% 78%,
+      rgba(247, 108, 156, 0.45) 0%,
+      transparent 60%
+    ),
+    linear-gradient(135deg, #fff7fa 0%, #ffe9f0 100%);
+  background-size: 180% 180%;
+  animation: hero-pan 22s ease-in-out infinite alternate;
+}
+
+@keyframes hero-pan {
+  from {
+    background-position: 0% 0%;
+  }
+  to {
+    background-position: 100% 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-aurora {
+    animation: none;
+  }
+}
+
+/* ── Category banner: slow drifting gradient ── */
+.cat-banner-bg {
+  background-size: 180% 180%;
+  animation: cat-pan 26s ease-in-out infinite alternate;
+}
+
+@keyframes cat-pan {
+  from {
+    background-position: 0% 50%;
+  }
+  to {
+    background-position: 100% 50%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cat-banner-bg {
+    animation: none;
+  }
+}

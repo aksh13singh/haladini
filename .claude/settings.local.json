@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "PowerShell(try { $r = Invoke-WebRequest -Uri \"http://localhost:3000\" -UseBasicParsing -TimeoutSec 15; Write-Output \\(\"HTTP \" + $r.StatusCode + \" — server is UP. Page bytes: \" + $r.Content.Length\\) } catch { Write-Output \\(\"Not responding: \" + $_.Exception.Message\\) })",
+      "mcp__Claude_Preview__preview_start",
+      "PowerShell(try { $r = Invoke-WebRequest \"http://localhost:3000/\" -UseBasicParsing -TimeoutSec 180; Write-Output \\(\"home -> HTTP \" + $r.StatusCode + \"  CSS: \" + \\($r.Content -match \"/_next/static/css\"\\) + \"  products: \" + \\($r.Content -match \"Gulbagh\"\\)\\) } catch { Write-Output \\(\"ERR \" + $_.Exception.Message\\) })",
+      "Bash(git rev-parse *)",
+      "Bash(git --version)",
+      "Bash(git init *)",
+      "Bash(git check-ignore *)",
+      "Bash(git add *)"
+    ]
+  }
+}

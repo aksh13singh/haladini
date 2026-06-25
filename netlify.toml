@@ -1,0 +1,18 @@
+# Netlify configuration for Haladini (Next.js 14 App Router)
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Official Next.js runtime — handles SSR, image optimization, ISR, etc.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+[build.environment]
+  # Use a modern Node runtime on Netlify build image
+  NODE_VERSION = "20"
+
+# Long-cache the immutable Next static assets
+[[headers]]
+  for = "/_next/static/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
