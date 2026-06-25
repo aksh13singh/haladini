@@ -96,8 +96,8 @@ export const mainNav: NavLink[] = [
 export const contact = {
   phone: "+91 98290 00000",
   phoneHref: "tel:+919829000000",
-  email: "hello@haladini.in",
-  emailHref: "mailto:hello@haladini.in",
+  email: "info@haladini.in",
+  emailHref: "mailto:info@haladini.in",
   address: "Haladini Studio, Jaipur, Rajasthan 302001, India",
   whatsapp: "https://wa.me/919829000000",
   instagram: "https://instagram.com/haladini",
