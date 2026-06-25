@@ -47,6 +47,72 @@ const values = [
   },
 ];
 
+type LetterLine = { text: string; variant?: "lead" | "accent" };
+
+const founderLetter: LetterLine[] = [
+  { text: "Every city has a story.", variant: "lead" },
+  {
+    text: "Mine begins in the timeless lanes of Jaipur—India's Pink City—where every sunrise touches ancient forts, hand-carved havelis, vibrant bazaars, and the unmistakable rhythm of artisans whose hands have preserved centuries of craftsmanship.",
+  },
+  {
+    text: "Growing up in Rajasthan, I wasn't surrounded by factories. I was surrounded by heritage.",
+  },
+  {
+    text: "I watched colours being mixed by hand, wooden blocks carrying generations of artistry, and fabrics transforming into pieces that weren't simply made—they were created with patience, precision, and pride. Every print held a story. Every pattern carried a legacy.",
+  },
+  { text: "Yet as the years passed, I noticed something changing." },
+  {
+    text: "The world was moving faster. Handmade artistry was slowly being replaced by mass production. Traditional crafts that once represented Rajasthan were becoming difficult to find in their purest form. The beauty of authentic hand block printing deserved more than being remembered—it deserved to be lived with every day.",
+  },
+  { text: "That thought became the seed of HALADINI.", variant: "accent" },
+  {
+    text: "HALADINI was never created to simply sell bedsheets, dohars, cushions, or apparel. It was created to preserve a feeling.",
+  },
+  {
+    text: "A feeling of waking up wrapped in craftsmanship instead of ordinary fabric.",
+  },
+  {
+    text: "A feeling of bringing home something made by skilled hands rather than machines.",
+  },
+  {
+    text: "A feeling of carrying a piece of Rajasthan into homes across the world.",
+  },
+  {
+    text: "Being born into Rajput heritage has always filled me with admiration for the values passed down through generations—honour, resilience, attention to detail, and deep respect for tradition. Those values became the foundation of HALADINI. While our products are contemporary in their appeal, their soul remains rooted in the timeless artistry of Rajasthan.",
+  },
+  {
+    text: "Every design begins with inspiration drawn from our land—its architecture, floral gardens, desert landscapes, royal courtyards, and centuries-old motifs. Skilled artisans then bring these ideas to life using the traditional hand block printing techniques that have been practiced for generations.",
+  },
+  { text: "No two impressions are ever perfectly identical.", variant: "accent" },
+  { text: "That isn't a flaw.", variant: "accent" },
+  {
+    text: "It's the signature of something made by human hands.",
+    variant: "accent",
+  },
+  {
+    text: "In a world chasing perfection through machines, we celebrate the quiet beauty of authenticity.",
+  },
+  {
+    text: "HALADINI is our promise that heritage doesn't belong only in museums or history books. It belongs in everyday life—in the spaces where families gather, where stories are shared, and where memories are made.",
+  },
+  {
+    text: "When you choose HALADINI, you are not simply choosing home furnishings or clothing.",
+  },
+  {
+    text: "You become a part of a story that began in Jaipur and continues wherever craftsmanship is appreciated.",
+  },
+  { text: "A story of tradition finding its place in modern homes." },
+  { text: "A story of Rajasthan living beyond its borders." },
+  {
+    text: "And a story that, with every hand-printed creation, is still being written.",
+  },
+  { text: "Welcome to HALADINI.", variant: "accent" },
+  { text: "Where heritage meets home.", variant: "accent" },
+];
+
+const founderQuote =
+  "Crafted in the Pink City. Inspired by Rajput heritage. Handcrafted for homes that value timeless beauty.";
+
 function Motif({ className }: { className?: string }) {
   return (
     <svg viewBox="0 0 100 100" fill="none" aria-hidden="true" className={className}>
@@ -112,6 +178,50 @@ export default function AboutPage() {
             piece begins with a hand-carved block and ends in your home —
             carrying with it the warmth of the hands that made it.
           </p>
+        </div>
+      </section>
+
+      {/* Founder's Corner */}
+      <section className="bg-cream">
+        <div className="container section">
+          <div className="mx-auto max-w-5xl">
+            <div className="mb-10 text-center">
+              <p className="eyebrow">Founder&apos;s Corner</p>
+              <h2 className="display-heading mx-auto mt-2 max-w-2xl text-3xl sm:text-4xl">
+                A Letter from the Founder
+              </h2>
+            </div>
+
+            <article className="relative overflow-hidden rounded-3xl bg-white p-6 shadow-card sm:p-8 lg:p-12">
+              <Motif className="pointer-events-none absolute -right-14 -top-14 h-56 w-56 text-flamingo-tint" />
+              <Motif className="pointer-events-none absolute -bottom-16 -left-16 h-56 w-56 text-cream" />
+
+              <div className="relative mx-auto max-w-3xl space-y-5">
+                {founderLetter.map((line, index) => (
+                  <p
+                    key={`${line.text}-${index}`}
+                    className={
+                      line.variant === "lead"
+                        ? "font-display text-2xl font-semibold leading-snug text-wine sm:text-3xl"
+                        : line.variant === "accent"
+                          ? "font-display text-xl font-semibold leading-snug text-flamingo-deep sm:text-2xl"
+                          : "text-base leading-8 text-ink/75 sm:text-lg"
+                    }
+                  >
+                    {line.text}
+                  </p>
+                ))}
+
+                <blockquote className="mt-10 border-l-4 border-flamingo-deep bg-cream px-5 py-5 font-display text-2xl font-semibold leading-snug text-wine sm:px-7 sm:text-3xl">
+                  &ldquo;{founderQuote}&rdquo;
+                </blockquote>
+
+                <div className="pt-4 text-sm font-semibold uppercase tracking-[0.22em] text-flamingo-deep">
+                  Haladini
+                </div>
+              </div>
+            </article>
+          </div>
         </div>
       </section>
 
