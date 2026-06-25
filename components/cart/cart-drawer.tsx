@@ -12,9 +12,10 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
+import { Price } from "@/components/currency/price";
 import { useCartStore } from "@/store/cart-store";
 import { siteConfig } from "@/lib/site-config";
-import { cn, formatINR } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 export function CartDrawer() {
   const { items, isOpen, setOpen, updateQuantity, removeItem, subtotal } =
@@ -74,7 +75,7 @@ export function CartDrawer() {
                   <>
                     Add{" "}
                     <span className="font-semibold">
-                      {formatINR(remaining)}
+                      <Price amount={remaining} />
                     </span>{" "}
                     more for free shipping
                   </>
@@ -158,7 +159,7 @@ export function CartDrawer() {
                           </button>
                         </div>
                         <span className="text-sm font-semibold text-wine">
-                          {formatINR(item.price * item.quantity)}
+                          <Price amount={item.price * item.quantity} />
                         </span>
                       </div>
                     </div>
@@ -172,7 +173,7 @@ export function CartDrawer() {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-muted-foreground">Subtotal</span>
                 <span className="font-display text-lg font-semibold text-wine">
-                  {formatINR(total)}
+                  <Price amount={total} />
                 </span>
               </div>
               <p className="mt-1 text-xs text-muted-foreground">

@@ -17,6 +17,7 @@ import { Logo } from "@/components/brand/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { MobileNav } from "@/components/layout/mobile-nav";
+import { CurrencySwitcher } from "@/components/currency/currency-switcher";
 import { useCartStore } from "@/store/cart-store";
 import { useWishlistStore } from "@/store/wishlist-store";
 import { useHasMounted } from "@/lib/use-has-mounted";
@@ -80,7 +81,7 @@ export function Header() {
             />
           </div>
 
-          {/* Right — wishlist, account, cart */}
+          {/* Right — currency, wishlist, account, cart */}
           <div className="flex items-center justify-end gap-0.5 md:gap-1">
             <button
               onClick={() => setSearchOpen((v) => !v)}
@@ -89,6 +90,8 @@ export function Header() {
             >
               <Search className="h-5 w-5" />
             </button>
+
+            <CurrencySwitcher className="mr-1 hidden sm:block" />
 
             <Link
               href="/wishlist"

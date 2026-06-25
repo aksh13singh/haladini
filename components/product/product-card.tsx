@@ -6,8 +6,9 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { Heart, ShoppingBag } from "lucide-react";
 
-import { cn, formatINR } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { BLUR_DATA_URL } from "@/lib/blur";
+import { Price } from "@/components/currency/price";
 import { useCartStore } from "@/store/cart-store";
 import { useWishlistStore } from "@/store/wishlist-store";
 import type { Product } from "@/lib/types";
@@ -123,11 +124,11 @@ export function ProductCard({
         </Link>
         <div className="mt-1 flex items-baseline gap-2">
           <span className="font-semibold text-wine">
-            {formatINR(product.price)}
+            <Price amount={product.price} />
           </span>
           {onSale && (
             <span className="text-sm text-ink/45 line-through">
-              {formatINR(product.compareAtPrice!)}
+              <Price amount={product.compareAtPrice!} />
             </span>
           )}
         </div>

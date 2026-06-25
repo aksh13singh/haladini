@@ -5,7 +5,7 @@ import { ChevronRight } from "lucide-react";
 
 import { categories } from "@/lib/site-config";
 import { getProductBySlug, getRelatedProducts } from "@/lib/products-db";
-import { formatINR } from "@/lib/utils";
+import { Price } from "@/components/currency/price";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductBuyBox } from "@/components/product/product-buy-box";
 import { ProductGrid } from "@/components/product/product-grid";
@@ -88,15 +88,15 @@ export default async function ProductPage({
 
           <div className="mt-4 flex flex-wrap items-baseline gap-3">
             <span className="text-2xl font-semibold text-wine">
-              {formatINR(product.price)}
+              <Price amount={product.price} />
             </span>
             {onSale && (
               <>
                 <span className="text-lg text-ink/45 line-through">
-                  {formatINR(product.compareAtPrice!)}
+                  <Price amount={product.compareAtPrice!} />
                 </span>
                 <span className="rounded-full bg-flamingo-tint px-2.5 py-1 text-xs font-semibold text-flamingo-deep">
-                  Save {formatINR(savings)}
+                  Save <Price amount={savings} />
                 </span>
               </>
             )}

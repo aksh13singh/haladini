@@ -5,10 +5,11 @@ import Link from "next/link";
 import { Minus, Plus, ShoppingBag, Trash2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { Price } from "@/components/currency/price";
 import { useHasMounted } from "@/lib/use-has-mounted";
 import { useCartStore } from "@/store/cart-store";
 import { getCartTotals } from "@/lib/cart";
-import { cn, formatINR } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 
 export function CartContent() {
   const mounted = useHasMounted();
@@ -112,7 +113,7 @@ export function CartContent() {
                   </button>
                 </div>
                 <span className="font-semibold text-wine">
-                  {formatINR(item.price * item.quantity)}
+                  <Price amount={item.price * item.quantity} />
                 </span>
               </div>
             </div>
@@ -138,7 +139,7 @@ export function CartContent() {
                 <>
                   Add{" "}
                   <span className="font-semibold">
-                    {formatINR(totals.freeShippingRemaining)}
+                    <Price amount={totals.freeShippingRemaining} />
                   </span>{" "}
                   more for free shipping
                 </>
@@ -155,18 +156,20 @@ export function CartContent() {
           <dl className="mt-5 space-y-3 text-sm">
             <div className="flex justify-between">
               <dt className="text-ink/60">Subtotal</dt>
-              <dd className="font-medium text-ink">{formatINR(totals.subtotal)}</dd>
+              <dd className="font-medium text-ink">
+                <Price amount={totals.subtotal} />
+              </dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-ink/60">Shipping</dt>
               <dd className="font-medium text-ink">
-                {totals.shipping === 0 ? "Free" : formatINR(totals.shipping)}
+                {totals.shipping === 0 ? "Free" : <Price amount={totals.shipping} />}
               </dd>
             </div>
             <div className="flex justify-between border-t border-flamingo-tint pt-3 text-base">
               <dt className="font-semibold text-wine">Total</dt>
               <dd className="font-display text-lg font-semibold text-wine">
-                {formatINR(totals.total)}
+                <Price amount={totals.total} />
               </dd>
             </div>
           </dl>
