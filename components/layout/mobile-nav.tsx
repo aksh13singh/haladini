@@ -11,7 +11,6 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import { HaladiniMark } from "@/components/brand/logo";
-import { CurrencySwitcher } from "@/components/currency/currency-switcher";
 import { mainNav, contact } from "@/lib/site-config";
 
 interface MobileNavProps {
@@ -64,10 +63,6 @@ export function MobileNav({ open, onOpenChange }: MobileNavProps) {
         </nav>
 
         <div className="border-t border-flamingo-tint px-6 py-5">
-          <div className="mb-4 flex items-center justify-between">
-            <span className="text-sm font-medium text-wine">Currency</span>
-            <CurrencySwitcher />
-          </div>
           <Button asChild className="w-full" onClick={() => onOpenChange(false)}>
             <Link href="/account">Sign in / Register</Link>
           </Button>

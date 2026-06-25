@@ -16,8 +16,6 @@ import { useOrderStore } from "@/store/order-store";
 import { getCartTotals } from "@/lib/cart";
 import { processPayment, isRazorpayConfigured } from "@/lib/payments";
 import { cn, formatINR } from "@/lib/utils";
-import { Price } from "@/components/currency/price";
-import { useCurrency } from "@/components/currency/currency-provider";
 import type { Order, PaymentMethod } from "@/lib/types";
 
 const genId = () =>
@@ -54,7 +52,6 @@ export function CheckoutForm() {
   const subtotalFn = useCartStore((s) => s.subtotal);
   const clearCart = useCartStore((s) => s.clearCart);
   const { user } = useSupabaseUser();
-  const { currency } = useCurrency();
   const addOrder = useOrderStore((s) => s.addOrder);
 
   const [address, setAddress] = useState({
@@ -280,7 +277,7 @@ export function CheckoutForm() {
                   </p>
                 </div>
                 <span className="text-sm font-medium text-wine">
-                  <Price amount={item.price * item.quantity} />
+                  {formatINR(item.price * item.quantity)}
                 </span>
               </li>
             ))}
@@ -289,34 +286,21 @@ export function CheckoutForm() {
           <dl className="mt-5 space-y-3 border-t border-flamingo-tint pt-4 text-sm">
             <div className="flex justify-between">
               <dt className="text-ink/60">Subtotal</dt>
-              <dd className="font-medium text-ink">
-                <Price amount={totals.subtotal} />
-              </dd>
+              <dd className="font-medium text-ink">{formatINR(totals.subtotal)}</dd>
             </div>
             <div className="flex justify-between">
               <dt className="text-ink/60">Shipping</dt>
               <dd className="font-medium text-ink">
-                {totals.shipping === 0 ? "Free" : <Price amount={totals.shipping} />}
+                {totals.shipping === 0 ? "Free" : formatINR(totals.shipping)}
               </dd>
             </div>
             <div className="flex justify-between border-t border-flamingo-tint pt-3 text-base">
               <dt className="font-semibold text-wine">Total</dt>
               <dd className="font-display text-lg font-semibold text-wine">
-                <Price amount={totals.total} />
+                {formatINR(totals.total)}
               </dd>
             </div>
           </dl>
-
-          {currency !== "INR" && (
-            <p className="mt-3 rounded-2xl bg-cream px-4 py-3 text-xs text-ink/65">
-              Prices shown in {currency} are a guide. Orders are billed in Indian
-              Rupees — you&apos;ll be charged{" "}
-              <span className="font-semibold text-wine">
-                {formatINR(totals.total)}
-              </span>
-              .
-            </p>
-          )}
 
           <Button type="submit" size="lg" disabled={placing} className="mt-6 w-full">
             {placing ? (

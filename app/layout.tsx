@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import { Fraunces, Poppins } from "next/font/google";
-import { cookies, headers } from "next/headers";
 
 import NextTopLoader from "nextjs-toploader";
 
@@ -10,32 +9,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CouponTab } from "@/components/layout/coupon-tab";
 import { CartDrawer } from "@/components/cart/cart-drawer";
-import { CurrencyProvider } from "@/components/currency/currency-provider";
 import { siteConfig } from "@/lib/site-config";
-import {
-  currencyForCountry,
-  isCurrencyCode,
-  DEFAULT_CURRENCY,
-  type CurrencyCode,
-} from "@/lib/currency";
-
-/** Resolve the visitor's starting currency: saved choice → geo-IP → ₹ INR. */
-function resolveInitialCurrency(): CurrencyCode {
-  const saved = cookies().get("currency")?.value;
-  if (isCurrencyCode(saved)) return saved;
-
-  // Netlify exposes visitor geolocation as a base64-encoded JSON header.
-  const geo = headers().get("x-nf-geo");
-  if (geo) {
-    try {
-      const data = JSON.parse(Buffer.from(geo, "base64").toString("utf-8"));
-      return currencyForCountry(data?.country?.code);
-    } catch {
-      // fall through to default
-    }
-  }
-  return DEFAULT_CURRENCY;
-}
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -108,14 +82,12 @@ export default function RootLayout({
           showSpinner={false}
           shadow="0 0 10px #F76C9C,0 0 5px #F76C9C"
         />
-        <CurrencyProvider initialCurrency={resolveInitialCurrency()}>
-          <AnnouncementBar />
-          <Header />
-          <main className="min-h-[60vh]">{children}</main>
-          <Footer />
-          <CouponTab />
-          <CartDrawer />
-        </CurrencyProvider>
+        <AnnouncementBar />
+        <Header />
+        <main className="min-h-[60vh]">{children}</main>
+        <Footer />
+        <CouponTab />
+        <CartDrawer />
       </body>
     </html>
   );
