@@ -46,6 +46,7 @@ export const categories: Category[] = [
     slug: "bedsheets",
     href: "/shop/bedsheets",
     blurb: "Block-print cotton bedsheets for restful, beautiful sleep.",
+    image: "/categories/bedsheets.jpeg",
     subcategories: [
       {
         name: "Handblock Print",
