@@ -22,6 +22,7 @@ const banners: Banner[] = [
     cta: "Shop Bedsheets",
     href: "/shop/bedsheets",
     gradient: "linear-gradient(150deg,#FC8EAC 0%,#F76C9C 55%,#9A4760 100%)",
+    image: "/banners/sleep-in-style.jpeg",
   },
   {
     eyebrow: "Suits & Shirts",
@@ -30,6 +31,7 @@ const banners: Banner[] = [
     cta: "Shop Apparel",
     href: "/shop/suits",
     gradient: "linear-gradient(150deg,#7A2E45 0%,#5F2335 100%)",
+    image: "/banners/wear-the-craft.jpeg",
   },
 ];
 
