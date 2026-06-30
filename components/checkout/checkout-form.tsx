@@ -14,6 +14,7 @@ import { useSupabaseUser } from "@/lib/supabase/use-user";
 import { createClient } from "@/lib/supabase/client";
 import { useOrderStore } from "@/store/order-store";
 import { getCartTotals } from "@/lib/cart";
+import { evaluateCoupon } from "@/lib/coupons";
 import { processPayment, isRazorpayConfigured } from "@/lib/payments";
 import { cn, formatINR } from "@/lib/utils";
 import type { Order, PaymentMethod } from "@/lib/types";
@@ -70,6 +71,13 @@ export function CheckoutForm() {
   const [placed, setPlaced] = useState(false);
   const [formError, setFormError] = useState("");
 
+  // Coupon
+  const [couponInput, setCouponInput] = useState("");
+  const [appliedCode, setAppliedCode] = useState<string | null>(null);
+  const [couponMsg, setCouponMsg] = useState<
+    { type: "ok" | "error"; text: string } | null
+  >(null);
+
   // Prefill from the signed-in account.
   useEffect(() => {
     if (!user) return;
@@ -115,8 +123,32 @@ export function CheckoutForm() {
     );
   }
 
-  const totals = getCartTotals(subtotalFn());
+  const subtotal = subtotalFn();
+  const couponEval = appliedCode ? evaluateCoupon(appliedCode, subtotal) : null;
+  const discount = couponEval && couponEval.ok ? couponEval.discount : 0;
+  const totals = getCartTotals(subtotal, discount);
   const razorpayReady = isRazorpayConfigured();
+
+  const applyCoupon = () => {
+    const res = evaluateCoupon(couponInput, subtotal);
+    if (res.ok) {
+      setAppliedCode(res.code);
+      setCouponInput(res.code);
+      setCouponMsg({
+        type: "ok",
+        text: `${res.code} applied — you saved ${formatINR(res.discount)}.`,
+      });
+    } else {
+      setAppliedCode(null);
+      setCouponMsg({ type: "error", text: res.error });
+    }
+  };
+
+  const removeCoupon = () => {
+    setAppliedCode(null);
+    setCouponInput("");
+    setCouponMsg(null);
+  };
 
   const validate = () => {
     const e: Record<string, string> = {};
@@ -159,6 +191,10 @@ export function CheckoutForm() {
       userId: user?.id ?? null,
       items: [...items],
       total: totals.total,
+      coupon:
+        appliedCode && totals.discount > 0
+          ? { code: appliedCode, discount: totals.discount }
+          : null,
       shippingAddress: { ...address },
       paymentMethod: method,
       status: method === "cod" ? "pending" : "paid",
@@ -283,11 +319,71 @@ export function CheckoutForm() {
             ))}
           </ul>
 
+          {/* Coupon */}
+          <div className="mt-5 border-t border-flamingo-tint pt-4">
+            {appliedCode && totals.discount > 0 ? (
+              <div className="flex items-center justify-between rounded-2xl bg-flamingo-tint/40 px-3.5 py-2.5">
+                <span className="text-sm text-wine">
+                  Code <span className="font-semibold">{appliedCode}</span> applied
+                </span>
+                <button
+                  type="button"
+                  onClick={removeCoupon}
+                  className="text-xs font-semibold text-flamingo-deep transition-colors hover:text-wine"
+                >
+                  Remove
+                </button>
+              </div>
+            ) : (
+              <div className="flex gap-2">
+                <Input
+                  value={couponInput}
+                  onChange={(e) => setCouponInput(e.target.value.toUpperCase())}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      applyCoupon();
+                    }
+                  }}
+                  placeholder="Coupon code"
+                  aria-label="Coupon code"
+                  className="uppercase tracking-wide placeholder:normal-case placeholder:tracking-normal"
+                />
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={applyCoupon}
+                  className="shrink-0"
+                >
+                  Apply
+                </Button>
+              </div>
+            )}
+            {couponMsg && (
+              <p
+                className={cn(
+                  "mt-2 text-xs",
+                  couponMsg.type === "ok"
+                    ? "text-flamingo-deep"
+                    : "text-destructive"
+                )}
+              >
+                {couponMsg.text}
+              </p>
+            )}
+          </div>
+
           <dl className="mt-5 space-y-3 border-t border-flamingo-tint pt-4 text-sm">
             <div className="flex justify-between">
               <dt className="text-ink/60">Subtotal</dt>
               <dd className="font-medium text-ink">{formatINR(totals.subtotal)}</dd>
             </div>
+            {totals.discount > 0 && (
+              <div className="flex justify-between text-flamingo-deep">
+                <dt>Discount{appliedCode ? ` (${appliedCode})` : ""}</dt>
+                <dd className="font-medium">−{formatINR(totals.discount)}</dd>
+              </div>
+            )}
             <div className="flex justify-between">
               <dt className="text-ink/60">Shipping</dt>
               <dd className="font-medium text-ink">

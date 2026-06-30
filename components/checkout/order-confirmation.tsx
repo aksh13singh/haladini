@@ -96,6 +96,13 @@ export function OrderConfirmation({ id }: { id: string }) {
           ))}
         </ul>
 
+        {order.coupon && order.coupon.discount > 0 && (
+          <div className="mt-4 flex items-center justify-between text-sm text-flamingo-deep">
+            <span>Discount ({order.coupon.code})</span>
+            <span className="font-medium">−{formatINR(order.coupon.discount)}</span>
+          </div>
+        )}
+
         <div className="mt-4 flex items-center justify-between border-t border-flamingo-tint/70 pt-4">
           <span className="text-sm text-ink/55">Total</span>
           <span className="font-display text-lg font-semibold text-wine">

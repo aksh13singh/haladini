@@ -59,6 +59,8 @@ export interface Order {
   userId?: string | null;
   items: CartItem[];
   total: number;
+  /** Applied discount code + ₹ amount, if a coupon was used. */
+  coupon?: { code: string; discount: number } | null;
   shippingAddress: ShippingAddress;
   paymentMethod: PaymentMethod;
   status: OrderStatus;
