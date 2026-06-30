@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { Heart, ShoppingBag } from "lucide-react";
+import { Heart, ShoppingBag, Star } from "lucide-react";
 
 import { cn, formatINR } from "@/lib/utils";
 import { BLUR_DATA_URL } from "@/lib/blur";
@@ -131,6 +131,15 @@ export function ProductCard({
             </span>
           )}
         </div>
+        {product.ratingCount ? (
+          <div className="mt-1 flex items-center gap-1 text-xs text-ink/60">
+            <Star className="h-3.5 w-3.5 fill-flamingo-deep text-flamingo-deep" />
+            <span className="font-medium text-wine">
+              {product.ratingAvg!.toFixed(1)}
+            </span>
+            <span>({product.ratingCount})</span>
+          </div>
+        ) : null}
       </div>
     </motion.div>
   );

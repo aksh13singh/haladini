@@ -1,6 +1,7 @@
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 import { isSupabaseConfigured } from "@/lib/supabase/client";
+import { getReviewSummaries } from "@/lib/reviews-db";
 import {
   sampleProducts,
   getNewArrivals as sampleNewArrivals,
@@ -60,6 +61,16 @@ function mapRow(row: any): Product {
   };
 }
 
+/** Attach review summary (avg rating + count) to each product for card display. */
+async function withRatings(products: Product[]): Promise<Product[]> {
+  const summaries = await getReviewSummaries();
+  if (!Object.keys(summaries).length) return products;
+  return products.map((p) => {
+    const s = summaries[p.id];
+    return s ? { ...p, ratingAvg: s.avg, ratingCount: s.count } : p;
+  });
+}
+
 /** All products from Supabase, or null to fall back to the sample catalogue. */
 async function fetchAll(): Promise<Product[] | null> {
   if (!isSupabaseConfigured) return null;
@@ -76,15 +87,17 @@ async function fetchAll(): Promise<Product[] | null> {
 }
 
 export async function getAllProducts(): Promise<Product[]> {
-  return (await fetchAll()) ?? sampleProducts;
+  return withRatings((await fetchAll()) ?? sampleProducts);
 }
 
 export async function getNewArrivals(limit = 8): Promise<Product[]> {
   const all = await fetchAll();
   if (!all) return sampleNewArrivals(limit);
-  return [...all]
-    .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
-    .slice(0, limit);
+  return withRatings(
+    [...all]
+      .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
+      .slice(0, limit)
+  );
 }
 
 export async function getProductsByCategory(
@@ -92,7 +105,7 @@ export async function getProductsByCategory(
 ): Promise<Product[]> {
   const all = await fetchAll();
   if (!all) return sampleByCategory(category);
-  return all.filter((p) => p.category === category);
+  return withRatings(all.filter((p) => p.category === category));
 }
 
 export async function getProductBySlug(
@@ -109,14 +122,16 @@ export async function getRelatedProducts(
 ): Promise<Product[]> {
   const all = await fetchAll();
   if (!all) return sampleRelated(product, limit);
-  return all
-    .filter((p) => p.category === product.category && p.id !== product.id)
-    .slice(0, limit);
+  return withRatings(
+    all
+      .filter((p) => p.category === product.category && p.id !== product.id)
+      .slice(0, limit)
+  );
 }
 
 export async function queryProducts(opts: ProductQuery): Promise<Product[]> {
   const all = await fetchAll();
-  return applyProductQuery(all ?? sampleProducts, opts);
+  return withRatings(applyProductQuery(all ?? sampleProducts, opts));
 }
 
 export async function getAllProductSlugs(): Promise<string[]> {

@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 import { isSupabaseConfigured } from "@/lib/supabase/client";
@@ -40,6 +41,39 @@ function mapRow(row: any): Review {
     createdAt: row.created_at,
   };
 }
+
+export interface ReviewSummary {
+  avg: number;
+  count: number;
+}
+
+/**
+ * Average rating + review count keyed by product id, for showing ratings on
+ * product cards. Memoised per request (React cache) so a page that renders many
+ * grids only hits the DB once. Empty if none/unconfigured.
+ */
+export const getReviewSummaries = cache(
+  async (): Promise<Record<string, ReviewSummary>> => {
+    if (!isSupabaseConfigured) return {};
+    try {
+      const { data, error } = await publicClient()
+        .from("reviews")
+        .select("product_id, rating");
+      if (error || !data) return {};
+      const acc: Record<string, { sum: number; count: number }> = {};
+      for (const row of data as { product_id: string; rating: number }[]) {
+        const k = row.product_id;
+        (acc[k] ??= { sum: 0, count: 0 }).sum += row.rating;
+        acc[k].count += 1;
+      }
+      const out: Record<string, ReviewSummary> = {};
+      for (const k in acc) out[k] = { avg: acc[k].sum / acc[k].count, count: acc[k].count };
+      return out;
+    } catch {
+      return {};
+    }
+  }
+);
 
 /** Public reviews for a product, newest first. Empty if none/unconfigured. */
 export async function getProductReviews(productId: string): Promise<Review[]> {

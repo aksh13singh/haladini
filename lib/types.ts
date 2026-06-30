@@ -19,6 +19,9 @@ export interface Product {
   stock: number;
   isNew: boolean;
   createdAt: string;
+  /** Review summary, attached when products are listed (cards). */
+  ratingAvg?: number | null;
+  ratingCount?: number;
 }
 
 export interface CartItem {

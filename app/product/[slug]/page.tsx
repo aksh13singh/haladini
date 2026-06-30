@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Star } from "lucide-react";
 
 import { categories } from "@/lib/site-config";
 import { getProductBySlug, getRelatedProducts } from "@/lib/products-db";
@@ -44,6 +44,10 @@ export default async function ProductPage({
     typeof product.compareAtPrice === "number" &&
     product.compareAtPrice > product.price;
   const savings = onSale ? product.compareAtPrice! - product.price : 0;
+  const reviewCount = reviews.length;
+  const reviewAvg = reviewCount
+    ? reviews.reduce((s, r) => s + r.rating, 0) / reviewCount
+    : 0;
 
   return (
     <div className="container section">
@@ -104,6 +108,21 @@ export default async function ProductPage({
               </>
             )}
           </div>
+
+          {reviewCount > 0 && (
+            <a
+              href="#reviews"
+              className="mt-3 inline-flex items-center gap-1.5 text-sm text-ink/65 transition-colors hover:text-flamingo-deep"
+            >
+              <Star className="h-4 w-4 fill-flamingo-deep text-flamingo-deep" />
+              <span className="font-semibold text-wine">
+                {reviewAvg.toFixed(1)}
+              </span>
+              <span>
+                · {reviewCount} {reviewCount === 1 ? "review" : "reviews"}
+              </span>
+            </a>
+          )}
 
           <p className="mt-5 leading-relaxed text-ink/70">
             {product.description}
