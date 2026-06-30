@@ -130,8 +130,10 @@ export async function getRelatedProducts(
 }
 
 export async function queryProducts(opts: ProductQuery): Promise<Product[]> {
-  const all = await fetchAll();
-  return withRatings(applyProductQuery(all ?? sampleProducts, opts));
+  const all = (await fetchAll()) ?? sampleProducts;
+  // Attach ratings before querying so "Top rated" sort has data to work with.
+  const rated = await withRatings(all);
+  return applyProductQuery(rated, opts);
 }
 
 export async function getAllProductSlugs(): Promise<string[]> {

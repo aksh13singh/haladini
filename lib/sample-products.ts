@@ -320,7 +320,7 @@ export function getRelatedProducts(product: Product, limit = 4): Product[] {
 }
 
 // ── Shop filtering / sorting ────────────────────────────────
-export type SortOption = "newest" | "price-asc" | "price-desc";
+export type SortOption = "newest" | "price-asc" | "price-desc" | "rating";
 
 export const PRICE_RANGES = {
   all: { label: "All prices", min: 0, max: Infinity },
@@ -362,6 +362,17 @@ export function applyProductQuery(
       return list.sort((a, b) => a.price - b.price);
     case "price-desc":
       return list.sort((a, b) => b.price - a.price);
+    case "rating":
+      // Highest average first; unrated products fall to the bottom, then count
+      // and recency break ties.
+      return list.sort((a, b) => {
+        const ra = a.ratingCount ? a.ratingAvg ?? 0 : -1;
+        const rb = b.ratingCount ? b.ratingAvg ?? 0 : -1;
+        if (rb !== ra) return rb - ra;
+        if ((b.ratingCount ?? 0) !== (a.ratingCount ?? 0))
+          return (b.ratingCount ?? 0) - (a.ratingCount ?? 0);
+        return +new Date(b.createdAt) - +new Date(a.createdAt);
+      });
     default:
       return list.sort(
         (a, b) => +new Date(b.createdAt) - +new Date(a.createdAt)

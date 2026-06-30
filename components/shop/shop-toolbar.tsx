@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 const SORTS = [
   { value: "newest", label: "Newest" },
+  { value: "rating", label: "Top rated" },
   { value: "price-asc", label: "Price: Low to High" },
   { value: "price-desc", label: "Price: High to Low" },
 ];
