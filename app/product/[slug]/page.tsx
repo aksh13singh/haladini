@@ -3,7 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ChevronRight, Star } from "lucide-react";
 
-import { categories } from "@/lib/site-config";
+import { categories, siteConfig } from "@/lib/site-config";
 import { getProductBySlug, getRelatedProducts } from "@/lib/products-db";
 import { getProductReviews } from "@/lib/reviews-db";
 import { formatINR } from "@/lib/utils";
@@ -48,9 +48,92 @@ export default async function ProductPage({
   const reviewAvg = reviewCount
     ? reviews.reduce((s, r) => s + r.rating, 0) / reviewCount
     : 0;
+  const productUrl = new URL(`/product/${product.slug}`, siteConfig.url).toString();
+  const productJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    "@id": `${productUrl}#product`,
+    name: product.name,
+    description: product.description,
+    image: product.images.map((image) => new URL(image, siteConfig.url).toString()),
+    brand: {
+      "@type": "Brand",
+      name: siteConfig.name,
+    },
+    category: category?.name ?? product.category,
+    material: product.fabric,
+    sku: product.id,
+    offers: {
+      "@type": "Offer",
+      url: productUrl,
+      priceCurrency: "INR",
+      price: product.price,
+      availability:
+        product.stock > 0
+          ? "https://schema.org/InStock"
+          : "https://schema.org/OutOfStock",
+      itemCondition: "https://schema.org/NewCondition",
+      seller: {
+        "@type": "Store",
+        name: siteConfig.name,
+      },
+    },
+    ...(reviewCount > 0
+      ? {
+          aggregateRating: {
+            "@type": "AggregateRating",
+            ratingValue: Number(reviewAvg.toFixed(1)),
+            reviewCount,
+          },
+        }
+      : {}),
+  };
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Home",
+        item: siteConfig.url,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Shop",
+        item: new URL("/shop", siteConfig.url).toString(),
+      },
+      ...(category
+        ? [
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: category.name,
+              item: new URL(category.href, siteConfig.url).toString(),
+            },
+          ]
+        : []),
+      {
+        "@type": "ListItem",
+        position: category ? 4 : 3,
+        name: product.name,
+        item: productUrl,
+      },
+    ],
+  };
 
   return (
-    <div className="container section">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(productJsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
+      <div className="container section">
       {/* Breadcrumb */}
       <nav
         aria-label="Breadcrumb"
@@ -170,6 +253,7 @@ export default async function ProductPage({
           </div>
         </section>
       )}
-    </div>
+      </div>
+    </>
   );
 }

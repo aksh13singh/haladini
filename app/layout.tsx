@@ -99,7 +99,9 @@ export const metadata: Metadata = {
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Store",
+  "@id": `${siteConfig.url.replace(/\/$/, "")}/#store`,
   name: siteConfig.name,
+  alternateName: "HALADINI",
   url: siteConfig.url,
   logo: new URL("/haladini-logo.png", siteConfig.url).toString(),
   image: new URL("/opengraph-image", siteConfig.url).toString(),
@@ -113,6 +115,51 @@ const jsonLd = {
     addressRegion: "Rajasthan",
     postalCode: "302001",
     addressCountry: "IN",
+  },
+  areaServed: {
+    "@type": "Country",
+    name: "India",
+  },
+  priceRange: "INR",
+  knowsAbout: [
+    "Jaipur hand block printing",
+    "handcrafted bedsheets",
+    "block-print cushions",
+    "cotton suits",
+    "cotton shirts",
+    "Indian home textiles",
+    "Rajasthan textile craft",
+  ],
+  hasOfferCatalog: {
+    "@type": "OfferCatalog",
+    name: "Haladini handcrafted collections",
+    itemListElement: [
+      {
+        "@type": "OfferCatalog",
+        name: "Bedsheets",
+        url: new URL("/shop/bedsheets", siteConfig.url).toString(),
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Dohar",
+        url: new URL("/shop/dohar", siteConfig.url).toString(),
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Cushions",
+        url: new URL("/shop/cushions", siteConfig.url).toString(),
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Suits",
+        url: new URL("/shop/suits", siteConfig.url).toString(),
+      },
+      {
+        "@type": "OfferCatalog",
+        name: "Shirts",
+        url: new URL("/shop/shirts", siteConfig.url).toString(),
+      },
+    ],
   },
   sameAs: [contact.instagram, contact.facebook],
 };

@@ -75,8 +75,28 @@ const faqGroups = [
 ];
 
 export default function FaqsPage() {
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqGroups.flatMap((group) =>
+      group.items.map((item) => ({
+        "@type": "Question",
+        name: item.q,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.a,
+        },
+      }))
+    ),
+  };
+
   return (
-    <div className="container section max-w-3xl">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
+      <div className="container section max-w-3xl">
       <header className="text-center">
         <p className="eyebrow">Help Centre</p>
         <h1 className="display-heading mt-2 text-4xl sm:text-5xl">
@@ -128,6 +148,7 @@ export default function FaqsPage() {
           Contact us →
         </Link>
       </div>
-    </div>
+      </div>
+    </>
   );
 }
