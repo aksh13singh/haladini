@@ -1,3 +1,5 @@
+import type { Metadata } from "next";
+
 import { Hero } from "@/components/home/hero";
 import { ShopByCategory } from "@/components/home/shop-by-category";
 import { NewIn } from "@/components/home/new-in";
@@ -6,6 +8,16 @@ import { BrandStatement } from "@/components/home/brand-statement";
 import { BulkOrders } from "@/components/home/bulk-orders";
 import { TrustBadges } from "@/components/home/trust-badges";
 import { Reveal } from "@/components/ui/reveal";
+import { siteConfig } from "@/lib/site-config";
+
+export const metadata: Metadata = {
+  title: "Haladini | Handcrafted Jaipur Home & Fashion",
+  description:
+    "Shop Haladini for handcrafted Jaipur block-print bedsheets, dohars, cushions, suits and shirts made with Indian textile heritage.",
+  alternates: {
+    canonical: siteConfig.url,
+  },
+};
 
 // Read fresh product data (New In) from Supabase on each request.
 export const dynamic = "force-dynamic";
