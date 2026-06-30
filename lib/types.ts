@@ -54,6 +54,17 @@ export interface ShippingAddress {
   pincode: string;
 }
 
+export interface Review {
+  id: string;
+  productId: string;
+  userId: string;
+  authorName: string;
+  rating: number; // 1–5
+  title: string | null;
+  body: string;
+  createdAt: string;
+}
+
 export interface Order {
   id: string;
   userId?: string | null;

@@ -5,10 +5,12 @@ import { ChevronRight } from "lucide-react";
 
 import { categories } from "@/lib/site-config";
 import { getProductBySlug, getRelatedProducts } from "@/lib/products-db";
+import { getProductReviews } from "@/lib/reviews-db";
 import { formatINR } from "@/lib/utils";
 import { ProductGallery } from "@/components/product/product-gallery";
 import { ProductBuyBox } from "@/components/product/product-buy-box";
 import { ProductGrid } from "@/components/product/product-grid";
+import { ProductReviews } from "@/components/product/product-reviews";
 import { Separator } from "@/components/ui/separator";
 
 export const dynamic = "force-dynamic";
@@ -37,6 +39,7 @@ export default async function ProductPage({
 
   const category = categories.find((c) => c.slug === product.category);
   const related = await getRelatedProducts(product, 4);
+  const reviews = await getProductReviews(product.id);
   const onSale =
     typeof product.compareAtPrice === "number" &&
     product.compareAtPrice > product.price;
@@ -129,6 +132,13 @@ export default async function ProductPage({
           </dl>
         </div>
       </div>
+
+      {/* Reviews */}
+      <ProductReviews
+        productId={product.id}
+        productName={product.name}
+        reviews={reviews}
+      />
 
       {/* Related */}
       {related.length > 0 && (
