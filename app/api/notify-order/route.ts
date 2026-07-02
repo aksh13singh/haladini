@@ -110,7 +110,11 @@ export async function POST(req: Request) {
     </div>
   </div>`;
 
-  const to = process.env.ORDER_NOTIFY_TO || "info@haladini.in";
+  // Comma-separated list supported, e.g. "info@haladini.in,owner@gmail.com"
+  const to = (process.env.ORDER_NOTIFY_TO || "info@haladini.in")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
   const from = process.env.ORDER_NOTIFY_FROM || "Haladini Orders <onboarding@resend.dev>";
 
   const res = await fetch("https://api.resend.com/emails", {
@@ -121,7 +125,7 @@ export async function POST(req: Request) {
     },
     body: JSON.stringify({
       from,
-      to: [to],
+      to,
       subject: `🛍️ New order #${shortId} — ${inr(order.total)} (${method})`,
       html,
     }),
