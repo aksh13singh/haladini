@@ -27,7 +27,7 @@ const categoryLinks = [
 ];
 
 const selectClass =
-  "h-10 rounded-full border border-flamingo-tint bg-white px-4 pr-8 text-sm font-medium text-wine transition-colors focus:border-flamingo-deep focus:outline-none";
+  "h-10 w-full min-w-0 rounded-full border border-flamingo-tint bg-white px-4 pr-8 text-sm font-medium text-wine transition-colors focus:border-flamingo-deep focus:outline-none sm:w-auto";
 
 interface ShopToolbarProps {
   activeCategory?: string;
@@ -103,7 +103,7 @@ export function ShopToolbar({
           />
         </form>
 
-        <div className="flex items-center gap-2">
+        <div className="grid grid-cols-2 gap-2 sm:flex sm:items-center">
           <select
             aria-label="Filter by price"
             value={price}

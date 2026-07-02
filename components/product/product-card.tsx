@@ -32,6 +32,7 @@ export function ProductCard({
   const onSale =
     typeof product.compareAtPrice === "number" &&
     product.compareAtPrice > product.price;
+  const soldOut = (product.stock ?? 0) <= 0;
 
   const hasSecond = product.images.length > 1;
   const quickAdd = () => addItem(product, product.sizes[0], 1);
@@ -75,16 +76,18 @@ export function ProductCard({
           )}
         </Link>
 
-        {(product.isNew || onSale) && (
+        {(soldOut || product.isNew || onSale) && (
           <span
             className={cn(
               "absolute left-3 top-3 rounded-full px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-wider shadow-sm",
-              product.isNew
-                ? "bg-white/95 text-wine"
-                : "bg-flamingo-deep text-white"
+              soldOut
+                ? "bg-wine/90 text-white"
+                : product.isNew
+                  ? "bg-white/95 text-wine"
+                  : "bg-flamingo-deep text-white"
             )}
           >
-            {product.isNew ? "New" : "Sale"}
+            {soldOut ? "Sold out" : product.isNew ? "New" : "Sale"}
           </span>
         )}
 
@@ -103,15 +106,17 @@ export function ProductCard({
           />
         </button>
 
-        <button
-          type="button"
-          onClick={quickAdd}
-          aria-label={`Add ${product.name} to cart`}
-          className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-wine px-3.5 py-2 text-xs font-semibold text-white shadow-soft transition-all duration-300 hover:bg-flamingo-deep sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
-        >
-          <ShoppingBag className="h-3.5 w-3.5" />
-          Add
-        </button>
+        {!soldOut && (
+          <button
+            type="button"
+            onClick={quickAdd}
+            aria-label={`Add ${product.name} to cart`}
+            className="absolute bottom-3 right-3 inline-flex items-center gap-1.5 rounded-full bg-wine px-3.5 py-2 text-xs font-semibold text-white shadow-soft transition-all duration-300 hover:bg-flamingo-deep sm:translate-y-2 sm:opacity-0 sm:group-hover:translate-y-0 sm:group-hover:opacity-100"
+          >
+            <ShoppingBag className="h-3.5 w-3.5" />
+            Add
+          </button>
+        )}
       </div>
 
       <div className="mt-3 px-0.5">

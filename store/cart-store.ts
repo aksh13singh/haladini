@@ -38,6 +38,8 @@ export const useCartStore = create<CartState>()(
       setOpen: (open) => set({ isOpen: open }),
 
       addItem: (product, size, quantity = 1) => {
+        // Never allow out-of-stock products into the bag.
+        if ((product.stock ?? 0) <= 0) return;
         const id = lineId(product.id, size);
         const existing = get().items.find((i) => i.id === id);
 
