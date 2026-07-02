@@ -219,6 +219,18 @@ export function CheckoutForm() {
       // ignore — the local order still drives the confirmation page
     }
 
+    // Notify the store owner by email (best-effort, non-blocking).
+    try {
+      fetch("/api/notify-order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId }),
+        keepalive: true, // survives the redirect to the confirmation page
+      }).catch(() => {});
+    } catch {
+      // never block checkout on the notification
+    }
+
     setPlaced(true);
     addOrder(order);
     clearCart();
