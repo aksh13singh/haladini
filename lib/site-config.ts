@@ -124,14 +124,14 @@ export const mainNav: NavLink[] = [
 ];
 
 export const contact = {
-  phone: "+91 98290 00000",
-  phoneHref: "tel:+919829000000",
+  phone: "+91 86908 60965",
+  phoneHref: "tel:+918690860965",
   email: "info@haladini.in",
   emailHref: "mailto:info@haladini.in",
   address: "Haladini Studio, Jaipur, Rajasthan 302001, India",
-  whatsapp: "https://wa.me/919829000000",
-  instagram: "https://instagram.com/haladini",
-  facebook: "https://facebook.com/haladini",
+  whatsapp: "https://wa.me/918690860965",
+  instagram: "https://instagram.com/haladini.in",
+  facebook: "https://facebook.com/haladini.in",
 } as const;
 
 export const footerLinks = {
