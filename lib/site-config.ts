@@ -128,7 +128,7 @@ export const contact = {
   phoneHref: "tel:+918690860965",
   email: "info@haladini.in",
   emailHref: "mailto:info@haladini.in",
-  address: "Haladini Studio, Jaipur, Rajasthan 302001, India",
+  address: "Haladini Studio, Sirsi Road, Jaipur, Rajasthan 302034, India",
   whatsapp: "https://wa.me/918690860965",
   instagram: "https://instagram.com/haladini.in",
   facebook: "https://facebook.com/haladini.in",
