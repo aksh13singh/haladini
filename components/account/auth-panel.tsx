@@ -77,7 +77,7 @@ export function AuthPanel() {
         data: { full_name: name.trim() },
         emailRedirectTo:
           typeof window !== "undefined"
-            ? `${window.location.origin}/account`
+            ? `${window.location.origin}/auth/callback?next=/account`
             : undefined,
       },
     });
@@ -94,7 +94,9 @@ export function AuthPanel() {
     reset();
     await supabase.auth.signInWithOAuth({
       provider: "google",
-      options: { redirectTo: `${window.location.origin}/account` },
+      options: {
+        redirectTo: `${window.location.origin}/auth/callback?next=/account`,
+      },
     });
   };
 
