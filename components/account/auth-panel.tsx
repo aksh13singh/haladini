@@ -83,6 +83,17 @@ export function AuthPanel() {
     });
     setLoading(false);
     if (error) return setError(error.message);
+
+    // Welcome email (best-effort — never blocks signup).
+    if (data.user?.id) {
+      fetch("/api/notify-signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: data.user.id }),
+        keepalive: true,
+      }).catch(() => {});
+    }
+
     if (data.session) router.refresh();
     else
       setInfo(

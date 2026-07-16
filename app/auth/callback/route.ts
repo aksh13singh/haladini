@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 
 import { createClient } from "@/lib/supabase/server";
+import { sendWelcomeEmail } from "@/lib/welcome-email";
 
 export const dynamic = "force-dynamic";
 
@@ -21,7 +22,16 @@ export async function GET(request: Request) {
     : "/account";
 
   if (code) {
-    await createClient().auth.exchangeCodeForSession(code);
+    const { data } = await createClient().auth.exchangeCodeForSession(code);
+    // Welcome email for first-time sign-ups (Google or email confirmation);
+    // idempotent, so repeat visits never re-send.
+    if (data?.user?.id) {
+      try {
+        await sendWelcomeEmail(data.user.id);
+      } catch (err) {
+        console.error("Welcome email (callback) failed:", err);
+      }
+    }
   }
   return NextResponse.redirect(`${origin}${safeNext}`);
 }
