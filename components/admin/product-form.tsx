@@ -204,13 +204,25 @@ export function ProductForm({ initial }: { initial?: ProductFormInitial }) {
           <label className={labelCls}>Stock</label>
           <Input type="number" value={stock} onChange={(e) => setStock(e.target.value)} placeholder="20" />
         </div>
-        <div>
-          <label className={labelCls}>Fabric</label>
-          <Input value={fabric} onChange={(e) => setFabric(e.target.value)} placeholder="100% cotton" />
+        <div className="sm:col-span-2">
+          <label className={labelCls}>Fabric / specifications</label>
+          <textarea
+            value={fabric}
+            onChange={(e) => setFabric(e.target.value)}
+            rows={4}
+            className={cn(fieldCls, "resize-y")}
+            placeholder={"Material: 100% Premium Cotton\nTechnique: Traditional Handblock Printing"}
+          />
         </div>
-        <div>
+        <div className="sm:col-span-2">
           <label className={labelCls}>Care (optional)</label>
-          <Input value={care} onChange={(e) => setCare(e.target.value)} placeholder="Gentle wash, line dry" />
+          <textarea
+            value={care}
+            onChange={(e) => setCare(e.target.value)}
+            rows={4}
+            className={cn(fieldCls, "resize-y")}
+            placeholder={"Machine wash separately on a gentle cycle.\nDry in shade to preserve the print."}
+          />
         </div>
       </div>
 

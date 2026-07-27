@@ -219,12 +219,12 @@ export default async function ProductPage({
           <dl className="space-y-3 text-sm">
             <div className="flex gap-3">
               <dt className="w-28 shrink-0 font-semibold text-wine">Fabric</dt>
-              <dd className="text-ink/70">{product.fabric}</dd>
+              <dd className="whitespace-pre-line text-ink/70">{product.fabric}</dd>
             </div>
             {product.care && (
               <div className="flex gap-3">
                 <dt className="w-28 shrink-0 font-semibold text-wine">Care</dt>
-                <dd className="text-ink/70">{product.care}</dd>
+                <dd className="whitespace-pre-line text-ink/70">{product.care}</dd>
               </div>
             )}
             <div className="flex gap-3">
