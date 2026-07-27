@@ -27,15 +27,6 @@ export const COUPONS: Coupon[] = [
     minSubtotal: 0,
     description: "₹100 off your order",
   },
-  {
-    // Deliberately hard to guess — a 90% code is costly if it spreads.
-    // Rename it here anytime; delete this entry to switch it off.
-    code: "HLD90XQ4T",
-    type: "percent",
-    value: 90,
-    minSubtotal: 0,
-    description: "90% off your order",
-  },
 ];
 
 export function findCoupon(code: string): Coupon | undefined {
