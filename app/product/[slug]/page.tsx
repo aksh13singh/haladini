@@ -207,7 +207,7 @@ export default async function ProductPage({
             </a>
           )}
 
-          <p className="mt-5 leading-relaxed text-ink/70">
+          <p className="mt-5 whitespace-pre-line leading-relaxed text-ink/70">
             {product.description}
           </p>
 
