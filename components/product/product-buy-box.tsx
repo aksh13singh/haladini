@@ -4,7 +4,9 @@ import { useEffect, useState } from "react";
 import { Heart, Minus, Plus, ShoppingBag } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { SizeChartDialog } from "@/components/product/size-chart";
 import { cn } from "@/lib/utils";
+import { getSizeChart } from "@/lib/size-charts";
 import { useCartStore } from "@/store/cart-store";
 import { useWishlistStore } from "@/store/wishlist-store";
 import type { Product } from "@/lib/types";
@@ -23,14 +25,23 @@ export function ProductBuyBox({ product }: { product: Product }) {
 
   const inStock = product.stock > 0;
   const lowStock = inStock && product.stock <= 5;
+  const sizeChart = getSizeChart(product.category);
 
   return (
     <div className="mt-7">
       {/* Size selector */}
       <div>
-        <div className="flex items-baseline justify-between">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <span className="text-sm font-semibold text-wine">Size</span>
-          <span className="text-sm text-ink/50">Selected: {size}</span>
+          <div className="flex items-baseline gap-4">
+            <span className="text-sm text-ink/50">Selected: {size}</span>
+            {sizeChart && (
+              <SizeChartDialog
+                chart={sizeChart}
+                availableSizes={product.sizes}
+              />
+            )}
+          </div>
         </div>
         <div className="mt-2 flex flex-wrap gap-2">
           {product.sizes.map((s) => (
