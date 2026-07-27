@@ -56,7 +56,8 @@ export function ProductGallery({
   }, [lightbox, next, prev]);
 
   return (
-    <div className="flex flex-col gap-4">
+    // min-w-0 so the thumbnail strip can't stretch this column past the viewport
+    <div className="flex min-w-0 flex-col gap-4">
       {/* Main image — hover to magnify, click to expand */}
       <div
         className="group relative aspect-[4/5] cursor-zoom-in select-none overflow-hidden rounded-3xl bg-flamingo-tint shadow-card"
@@ -89,7 +90,7 @@ export function ProductGallery({
 
       {/* Thumbnails */}
       {gallery.length > 1 && (
-        <div className="flex gap-3">
+        <div className="scrollbar-hide -mx-1 flex gap-3 overflow-x-auto px-1 pb-1">
           {gallery.map((src, i) => (
             <button
               key={src + i}
@@ -98,7 +99,7 @@ export function ProductGallery({
               aria-label={`View photo ${i + 1}`}
               aria-current={active === i}
               className={cn(
-                "relative aspect-square w-20 overflow-hidden rounded-xl border-2 transition-colors",
+                "relative aspect-square w-20 shrink-0 overflow-hidden rounded-xl border-2 transition-colors",
                 active === i
                   ? "border-flamingo-deep"
                   : "border-transparent hover:border-flamingo-tint"
