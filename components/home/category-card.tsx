@@ -58,12 +58,18 @@ export function CategoryCard({ category }: { category: Category }) {
       {/* Legibility overlay for the bottom-left label */}
       <div className="absolute inset-0 bg-gradient-to-t from-wine/75 via-wine/10 to-transparent" />
 
+      {category.comingSoon && (
+        <span className="absolute left-3 top-3 rounded-full bg-white/95 px-2.5 py-1 text-[0.62rem] font-bold uppercase tracking-wider text-wine shadow-sm">
+          Coming Soon
+        </span>
+      )}
+
       <div className="relative p-5 md:p-6">
         <h3 className="font-display text-2xl font-semibold text-white md:text-[1.7rem]">
           {category.name}
         </h3>
         <span className="mt-1 inline-flex items-center gap-1.5 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-white/85">
-          Shop the edit
+          {category.comingSoon ? "Coming soon" : "Shop the edit"}
           <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
         </span>
       </div>

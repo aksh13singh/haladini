@@ -39,6 +39,9 @@ export type Category = {
    *  page, each with its own /shop/<category>/<subcategory> page. Each may set
    *  its own banner `image`; otherwise it inherits the parent category's. */
   subcategories?: { name: string; slug: string; blurb?: string; image?: string }[];
+  /** Collection not live yet — shows a Coming Soon treatment instead of
+   *  products (category page + homepage card badge). */
+  comingSoon?: boolean;
 };
 
 export const categories: Category[] = [
@@ -95,6 +98,7 @@ export const categories: Category[] = [
     href: "/shop/shirts",
     blurb: "Relaxed block-print shirts, made for everyday ease.",
     image: "/categories/shirts.jpeg",
+    comingSoon: true,
   },
 ];
 

@@ -8,6 +8,7 @@ import { ProductGrid } from "@/components/product/product-grid";
 import { ShopToolbar } from "@/components/shop/shop-toolbar";
 import { SubcategoryChips } from "@/components/shop/subcategory-chips";
 import { CategoryBanner } from "@/components/shop/category-banner";
+import { ComingSoon } from "@/components/shop/coming-soon";
 import { EmptyState } from "@/components/shop/empty-state";
 
 export function generateStaticParams() {
@@ -38,6 +39,20 @@ export default async function CategoryPage({
 }) {
   const cat = categories.find((c) => c.slug === params.category);
   if (!cat) notFound();
+
+  if (cat.comingSoon) {
+    return (
+      <>
+        <CategoryBanner
+          category={cat.slug}
+          title={cat.name}
+          tagline={cat.blurb}
+          image={cat.image}
+        />
+        <ComingSoon categoryName={cat.name} />
+      </>
+    );
+  }
 
   const sort = (first(searchParams.sort) as SortOption) ?? "newest";
   const price = (first(searchParams.price) as PriceKey) ?? "all";
