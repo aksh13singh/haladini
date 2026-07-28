@@ -24,7 +24,7 @@ const sections = [
   {
     heading: "3. Orders & payment",
     body: [
-      "When you place an order, you make an offer to purchase. We may accept or decline any order at our discretion (for example, if an item is out of stock). Payment is processed securely via our payment partners, and Cash on Delivery may be available on eligible orders.",
+      "When you place an order, you make an offer to purchase. We may accept or decline any order at our discretion (for example, if an item is out of stock). Payment is processed securely via our payment partners.",
     ],
   },
   {

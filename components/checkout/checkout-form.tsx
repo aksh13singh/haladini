@@ -66,7 +66,7 @@ export function CheckoutForm() {
     pincode: "",
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
-  const [method, setMethod] = useState<PaymentMethod>("cod");
+  const [method, setMethod] = useState<PaymentMethod>("razorpay");
   const [placing, setPlacing] = useState(false);
   const [placed, setPlaced] = useState(false);
   const [formError, setFormError] = useState("");
@@ -283,20 +283,13 @@ export function CheckoutForm() {
           <h2 className="font-display text-xl font-semibold text-wine">Payment</h2>
           <div className="mt-4 space-y-3">
             <PaymentOption
-              selected={method === "cod"}
-              onSelect={() => setMethod("cod")}
-              title="Cash on Delivery"
-              desc="Pay in cash when your order arrives."
-              available
-            />
-            <PaymentOption
               selected={method === "razorpay"}
               onSelect={() => razorpayReady && setMethod("razorpay")}
               title="Pay Online · UPI / Cards / Netbanking"
               desc={
                 razorpayReady
                   ? "Secure payment via Razorpay."
-                  : "Add your Razorpay keys to .env.local to enable online payments."
+                  : "Online payments are temporarily unavailable. Please try again shortly."
               }
               available={razorpayReady}
             />

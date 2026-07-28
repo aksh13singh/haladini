@@ -21,7 +21,7 @@ import {
 } from "@/lib/site-config";
 
 function PaymentIcons() {
-  const methods = ["Visa", "Mastercard", "UPI", "Razorpay", "COD"];
+  const methods = ["Visa", "Mastercard", "UPI", "Razorpay", "Net Banking"];
   return (
     <div className="flex flex-wrap gap-2">
       {methods.map((m) => (

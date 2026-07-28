@@ -64,11 +64,11 @@ const faqGroups = [
     items: [
       {
         q: "What payment methods do you accept?",
-        a: "We accept cards, UPI and net banking via Razorpay, as well as Cash on Delivery (COD) on eligible orders.",
+        a: "We accept cards, UPI and net banking, processed securely via Razorpay.",
       },
       {
-        q: "Is Cash on Delivery available?",
-        a: "Yes, COD is available across most pin codes in India. You'll see the option at checkout if it's available for your address.",
+        q: "Is my payment secure?",
+        a: "Yes. Payments are handled by Razorpay, a PCI-DSS compliant gateway. We never see or store your card details.",
       },
     ],
   },

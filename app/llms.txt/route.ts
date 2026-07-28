@@ -75,7 +75,7 @@ ${productLines}
 
 - Free shipping is available on orders over INR ${siteConfig.freeShippingThreshold}.
 - Returns are accepted within 7 days for unused items in original condition and packaging.
-- Payment options include cards, UPI, net banking via Razorpay, and Cash on Delivery on eligible orders.
+- Payment options include cards, UPI and net banking, processed securely via Razorpay.
 - Orders are usually dispatched within 2-3 business days and typically arrive within 4-7 business days across India.
 
 ## Contact

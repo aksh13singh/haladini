@@ -32,7 +32,7 @@ const sections = [
   {
     heading: "Refunds",
     body: [
-      "Once we receive and inspect your returned item, we'll process your refund to the original payment method within 5–7 business days. For Cash on Delivery orders, we'll arrange a bank transfer or store credit.",
+      "Once we receive and inspect your returned item, we'll process your refund to the original payment method within 5–7 business days.",
     ],
   },
   {

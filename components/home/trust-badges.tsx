@@ -17,7 +17,7 @@ const badges = [
   {
     icon: ShieldCheck,
     title: "Secure Payments",
-    text: "Cards, UPI & Cash on Delivery",
+    text: "Cards, UPI & Net Banking",
   },
 ];
 

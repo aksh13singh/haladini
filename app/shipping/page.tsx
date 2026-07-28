@@ -7,7 +7,7 @@ import { formatINR } from "@/lib/utils";
 export const metadata: Metadata = {
   title: "Shipping & Delivery",
   description:
-    "Haladini shipping and delivery information — free shipping, dispatch times, delivery estimates, tracking and COD.",
+    "Haladini shipping and delivery information — free shipping, dispatch times, delivery estimates and tracking.",
 };
 
 const sections = [
@@ -41,12 +41,6 @@ const sections = [
     heading: "Order tracking",
     body: [
       "As soon as your order ships, we'll share tracking details by email or SMS so you can follow it to your doorstep.",
-    ],
-  },
-  {
-    heading: "Cash on Delivery",
-    body: [
-      "Cash on Delivery (COD) is available across most pin codes in India. If COD is available for your address, you'll see the option at checkout.",
     ],
   },
   {
