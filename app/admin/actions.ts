@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { sendReviewRequestEmail } from "@/lib/review-request-email";
 
 export interface ProductInput {
   name: string;
@@ -100,8 +101,27 @@ export async function updateOrderStatus(
   if (denied) return { error: denied };
 
   const admin = createAdminClient();
+
+  // Read the current status first so the review request only fires on the
+  // transition into "delivered" — re-saving the same status won't re-send.
+  const { data: existing } = await admin
+    .from("orders")
+    .select("status")
+    .eq("id", id)
+    .single();
+
   const { error } = await admin.from("orders").update({ status }).eq("id", id);
   if (error) return { error: error.message };
+
+  if (status === "delivered" && existing?.status !== "delivered") {
+    try {
+      await sendReviewRequestEmail(id);
+    } catch (err) {
+      // Never fail the status update because an email didn't go out.
+      console.error("Review request email error:", err);
+    }
+  }
+
   revalidatePath("/admin/orders");
   return { ok: true };
 }
