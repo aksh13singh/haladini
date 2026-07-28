@@ -71,7 +71,10 @@ export function ProductGallery({
           alt={name}
           fill
           priority
-          sizes="(max-width: 1024px) 100vw, 50vw"
+          quality={90}
+          /* Over-request width so the 2.2x hover-magnify still has real pixels
+             to show instead of upscaling a display-sized image. */
+          sizes="(max-width: 1024px) 200vw, 110vw"
           style={{
             transformOrigin: origin,
             transform: zooming ? "scale(2.2)" : "scale(1)",
@@ -147,6 +150,7 @@ export function ProductGallery({
                 src={gallery[active]}
                 alt={`${name} — photo ${active + 1}`}
                 fill
+                quality={90}
                 sizes="100vw"
                 className="object-contain"
               />
