@@ -8,6 +8,7 @@ import { ImagePlus, Loader2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { categories } from "@/lib/site-config";
+import { compressImage } from "@/lib/compress-image";
 import { cn, slugify } from "@/lib/utils";
 import { createClient } from "@/lib/supabase/client";
 import { saveProduct, type ProductInput } from "@/app/admin/actions";
@@ -58,6 +59,7 @@ export function ProductForm({ initial }: { initial?: ProductFormInitial }) {
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [saved, setSaved] = useState({ before: 0, after: 0 });
 
   const subOptions = categories.find((c) => c.slug === category)?.subcategories ?? [];
 
@@ -70,7 +72,17 @@ export function ProductForm({ initial }: { initial?: ProductFormInitial }) {
     if (!files?.length) return;
     setError("");
     setUploading(true);
-    for (const file of Array.from(files)) {
+    setSaved({ before: 0, after: 0 });
+
+    for (const original of Array.from(files)) {
+      // Shrink before upload — full-size camera photos are what ran the
+      // Supabase egress quota over.
+      const { file, originalBytes, compressedBytes } = await compressImage(original);
+      setSaved((s) => ({
+        before: s.before + originalBytes,
+        after: s.after + compressedBytes,
+      }));
+
       const ext = file.name.split(".").pop() ?? "jpg";
       const path = `${slug || slugify(name) || "product"}/${Date.now()}-${Math.random()
         .toString(36)
@@ -272,7 +284,15 @@ export function ProductForm({ initial }: { initial?: ProductFormInitial }) {
         </div>
         <p className="mt-2 text-xs text-ink/45">
           The first photo is the main image. Drag isn&apos;t needed — just click +.
+          Photos are automatically resized and compressed before upload.
         </p>
+        {saved.before > 0 && saved.after < saved.before && (
+          <p className="mt-1 text-xs font-medium text-flamingo-deep">
+            Compressed {(saved.before / 1e6).toFixed(1)}MB →{" "}
+            {(saved.after / 1e6).toFixed(1)}MB (
+            {Math.round((1 - saved.after / saved.before) * 100)}% smaller)
+          </p>
+        )}
       </div>
 
       {error && <p className="text-sm text-destructive">{error}</p>}
