@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { OrderItemImage } from "@/components/order/order-item-image";
 import Link from "next/link";
 import { CheckCircle2 } from "lucide-react";
 
@@ -78,11 +78,12 @@ export function OrderConfirmation({ id }: { id: string }) {
         <ul className="mt-4 space-y-3">
           {order.items.map((item) => (
             <li key={item.id} className="flex items-center gap-3">
-              <div className="relative h-14 w-12 shrink-0 overflow-hidden rounded-lg bg-cream">
-                {item.image && (
-                  <Image src={item.image} alt={item.name} fill sizes="48px" className="object-cover" />
-                )}
-              </div>
+              <OrderItemImage
+                src={item.image}
+                alt={item.name}
+                sizes="48px"
+                className="h-14 w-12 rounded-lg"
+              />
               <div className="min-w-0 flex-1">
                 <p className="truncate text-sm font-medium text-ink">{item.name}</p>
                 <p className="text-xs text-ink/50">

@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import { OrderItemImage } from "@/components/order/order-item-image";
 import Link from "next/link";
 import { ChevronLeft, Package } from "lucide-react";
 
@@ -99,17 +99,11 @@ export function OrdersScreen() {
               <ul className="mt-4 space-y-3">
                 {order.items.map((item) => (
                   <li key={item.id} className="flex items-center gap-3">
-                    <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-xl bg-flamingo-tint">
-                      {item.image && (
-                        <Image
-                          src={item.image}
-                          alt={item.name}
-                          fill
-                          sizes="56px"
-                          className="object-cover"
-                        />
-                      )}
-                    </div>
+                    <OrderItemImage
+                      src={item.image}
+                      alt={item.name}
+                      className="h-14 w-14"
+                    />
                     <div className="min-w-0 flex-1">
                       <p className="truncate text-sm font-medium text-ink">
                         {item.name}
