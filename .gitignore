@@ -35,3 +35,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+
+# Local data exports — contains customer PII, never commit
+/backup/
