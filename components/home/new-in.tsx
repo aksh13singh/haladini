@@ -7,6 +7,10 @@ import { ProductCard } from "@/components/product/product-card";
 export async function NewIn() {
   const products = await getNewArrivals(8);
 
+  // Nothing to show (e.g. the catalogue can't be loaded) — hide the whole
+  // section rather than render an empty row.
+  if (products.length === 0) return null;
+
   return (
     <section id="new-in" className="section scroll-mt-28 bg-cream">
       <div className="container">

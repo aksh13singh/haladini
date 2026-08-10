@@ -1,13 +1,10 @@
+import { cache } from "react";
 import { createClient as createSupabaseClient } from "@supabase/supabase-js";
 
 import { isSupabaseConfigured } from "@/lib/supabase/client";
 import { getReviewSummaries } from "@/lib/reviews-db";
 import {
   sampleProducts,
-  getNewArrivals as sampleNewArrivals,
-  getProductsByCategory as sampleByCategory,
-  getProductBySlug as sampleBySlug,
-  getRelatedProducts as sampleRelated,
   applyProductQuery,
   type ProductQuery,
 } from "@/lib/sample-products";
@@ -71,8 +68,12 @@ async function withRatings(products: Product[]): Promise<Product[]> {
   });
 }
 
-/** All products from Supabase, or null to fall back to the sample catalogue. */
-async function fetchAll(): Promise<Product[] | null> {
+/**
+ * All products from Supabase, or null if they can't be read.
+ * Memoised per request, so a page that needs the catalogue several times
+ * (product + related, grid + ratings) only queries once.
+ */
+const fetchAll = cache(async (): Promise<Product[] | null> => {
   if (!isSupabaseConfigured) return null;
   try {
     const { data, error } = await publicClient()
@@ -84,15 +85,35 @@ async function fetchAll(): Promise<Product[] | null> {
   } catch {
     return null;
   }
+});
+
+/**
+ * The catalogue to render.
+ *
+ * If Supabase isn't configured at all (local dev with no keys) we fall back to
+ * the bundled sample catalogue so the site still works. But if it IS configured
+ * and unreachable, we return nothing rather than sample data — showing
+ * placeholder products at placeholder prices to real shoppers is worse than
+ * showing an honest "temporarily unavailable" notice.
+ */
+async function catalogue(): Promise<Product[]> {
+  const all = await fetchAll();
+  if (all) return all;
+  return isSupabaseConfigured ? [] : sampleProducts;
 }
 
+/** True when the store is configured but the catalogue can't be loaded. */
+export const isCatalogueUnavailable = cache(async (): Promise<boolean> => {
+  if (!isSupabaseConfigured) return false;
+  return (await fetchAll()) === null;
+});
+
 export async function getAllProducts(): Promise<Product[]> {
-  return withRatings((await fetchAll()) ?? sampleProducts);
+  return withRatings(await catalogue());
 }
 
 export async function getNewArrivals(limit = 8): Promise<Product[]> {
-  const all = await fetchAll();
-  if (!all) return sampleNewArrivals(limit);
+  const all = await catalogue();
   return withRatings(
     [...all]
       .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
@@ -103,16 +124,14 @@ export async function getNewArrivals(limit = 8): Promise<Product[]> {
 export async function getProductsByCategory(
   category: CategorySlug
 ): Promise<Product[]> {
-  const all = await fetchAll();
-  if (!all) return sampleByCategory(category);
+  const all = await catalogue();
   return withRatings(all.filter((p) => p.category === category));
 }
 
 export async function getProductBySlug(
   slug: string
 ): Promise<Product | undefined> {
-  const all = await fetchAll();
-  if (!all) return sampleBySlug(slug);
+  const all = await catalogue();
   return all.find((p) => p.slug === slug);
 }
 
@@ -120,8 +139,7 @@ export async function getRelatedProducts(
   product: Product,
   limit = 4
 ): Promise<Product[]> {
-  const all = await fetchAll();
-  if (!all) return sampleRelated(product, limit);
+  const all = await catalogue();
   return withRatings(
     all
       .filter((p) => p.category === product.category && p.id !== product.id)
@@ -130,13 +148,11 @@ export async function getRelatedProducts(
 }
 
 export async function queryProducts(opts: ProductQuery): Promise<Product[]> {
-  const all = (await fetchAll()) ?? sampleProducts;
   // Attach ratings before querying so "Top rated" sort has data to work with.
-  const rated = await withRatings(all);
+  const rated = await withRatings(await catalogue());
   return applyProductQuery(rated, opts);
 }
 
 export async function getAllProductSlugs(): Promise<string[]> {
-  const all = await fetchAll();
-  return (all ?? sampleProducts).map((p) => p.slug);
+  return (await catalogue()).map((p) => p.slug);
 }

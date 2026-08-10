@@ -5,8 +5,9 @@ import { Button } from "@/components/ui/button";
 import { ProductGrid } from "@/components/product/product-grid";
 import { ShopToolbar } from "@/components/shop/shop-toolbar";
 import { CategoryBanner } from "@/components/shop/category-banner";
+import { CatalogueUnavailable } from "@/components/shop/catalogue-unavailable";
 import { EmptyState } from "@/components/shop/empty-state";
-import { queryProducts } from "@/lib/products-db";
+import { isCatalogueUnavailable, queryProducts } from "@/lib/products-db";
 import type { PriceKey, SortOption } from "@/lib/sample-products";
 
 export const metadata: Metadata = {
@@ -30,6 +31,7 @@ export default async function ShopPage({
   const q = first(searchParams.q) ?? "";
 
   const products = await queryProducts({ q, sort, price });
+  const unavailable = await isCatalogueUnavailable();
 
   return (
     <>
@@ -40,29 +42,33 @@ export default async function ShopPage({
         image="/categories/shop-all.jpeg"
       />
 
-      <div className="container section">
-        <ShopToolbar activeCategory="all" sort={sort} price={price} q={q} />
+      {unavailable ? (
+        <CatalogueUnavailable />
+      ) : (
+        <div className="container section">
+          <ShopToolbar activeCategory="all" sort={sort} price={price} q={q} />
 
-        <p className="mt-6 text-sm text-ink/50">
-          {products.length} {products.length === 1 ? "product" : "products"}
-          {q ? ` for “${q}”` : ""}
-        </p>
+          <p className="mt-6 text-sm text-ink/50">
+            {products.length} {products.length === 1 ? "product" : "products"}
+            {q ? ` for “${q}”` : ""}
+          </p>
 
-        <div className="mt-4">
-          {products.length > 0 ? (
-            <ProductGrid products={products} />
-          ) : (
-            <EmptyState
-              message="We couldn't find anything matching your filters. Try a different search or browse everything."
-              action={
-                <Button asChild variant="outline">
-                  <Link href="/shop">Clear filters</Link>
-                </Button>
-              }
-            />
-          )}
+          <div className="mt-4">
+            {products.length > 0 ? (
+              <ProductGrid products={products} />
+            ) : (
+              <EmptyState
+                message="We couldn't find anything matching your filters. Try a different search or browse everything."
+                action={
+                  <Button asChild variant="outline">
+                    <Link href="/shop">Clear filters</Link>
+                  </Button>
+                }
+              />
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 }

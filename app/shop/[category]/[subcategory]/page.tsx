@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { categories } from "@/lib/site-config";
-import { queryProducts } from "@/lib/products-db";
+import { isCatalogueUnavailable, queryProducts } from "@/lib/products-db";
 import type { PriceKey, SortOption } from "@/lib/sample-products";
 import { ProductGrid } from "@/components/product/product-grid";
 import { ShopToolbar } from "@/components/shop/shop-toolbar";
 import { SubcategoryChips } from "@/components/shop/subcategory-chips";
 import { CategoryBanner } from "@/components/shop/category-banner";
+import { CatalogueUnavailable } from "@/components/shop/catalogue-unavailable";
 import { EmptyState } from "@/components/shop/empty-state";
 
 export function generateStaticParams() {
@@ -61,6 +62,21 @@ export default async function SubcategoryPage({
     sort,
     price,
   });
+
+  if (await isCatalogueUnavailable()) {
+    return (
+      <>
+        <CategoryBanner
+          category={cat.slug}
+          eyebrow={cat.name}
+          title={sub.name}
+          tagline={sub.blurb ?? cat.blurb}
+          image={sub.image ?? cat.image}
+        />
+        <CatalogueUnavailable />
+      </>
+    );
+  }
 
   return (
     <>

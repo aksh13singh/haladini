@@ -2,12 +2,13 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { categories } from "@/lib/site-config";
-import { queryProducts } from "@/lib/products-db";
+import { isCatalogueUnavailable, queryProducts } from "@/lib/products-db";
 import type { PriceKey, SortOption } from "@/lib/sample-products";
 import { ProductGrid } from "@/components/product/product-grid";
 import { ShopToolbar } from "@/components/shop/shop-toolbar";
 import { SubcategoryChips } from "@/components/shop/subcategory-chips";
 import { CategoryBanner } from "@/components/shop/category-banner";
+import { CatalogueUnavailable } from "@/components/shop/catalogue-unavailable";
 import { ComingSoon } from "@/components/shop/coming-soon";
 import { EmptyState } from "@/components/shop/empty-state";
 
@@ -59,6 +60,20 @@ export default async function CategoryPage({
   const q = first(searchParams.q) ?? "";
 
   const products = await queryProducts({ category: cat.slug, q, sort, price });
+
+  if (await isCatalogueUnavailable()) {
+    return (
+      <>
+        <CategoryBanner
+          category={cat.slug}
+          title={cat.name}
+          tagline={cat.blurb}
+          image={cat.image}
+        />
+        <CatalogueUnavailable />
+      </>
+    );
+  }
 
   return (
     <>
