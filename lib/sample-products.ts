@@ -349,9 +349,15 @@ export function applyProductQuery(
     if (category && category !== "all" && p.category !== category) return false;
     if (subcategory && p.subcategory !== subcategory) return false;
     if (p.price < range.min || p.price > range.max) return false;
+    // Listings carry only card fields, so `description` may be absent — search
+    // over whatever text we do have rather than the string "undefined".
     if (
       search &&
-      !`${p.name} ${p.description} ${p.category}`.toLowerCase().includes(search)
+      ![p.name, p.category, p.subcategory, p.description]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+        .includes(search)
     )
       return false;
     return true;

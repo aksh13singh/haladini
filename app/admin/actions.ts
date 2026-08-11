@@ -57,10 +57,17 @@ function toRow(input: ProductInput) {
   };
 }
 
-function refresh() {
+/**
+ * Storefront pages are cached (see `revalidate` in the page files), so an admin
+ * change has to purge them explicitly — otherwise edits wouldn't show until the
+ * cache expired. `slug` purges that product's own page too.
+ */
+function refresh(slug?: string) {
   revalidatePath("/admin/products");
   revalidatePath("/shop");
   revalidatePath("/");
+  revalidatePath("/shop/[category]", "page");
+  if (slug) revalidatePath(`/product/${slug}`);
 }
 
 export async function saveProduct(
@@ -78,7 +85,7 @@ export async function saveProduct(
     const { error } = await admin.from("products").insert(toRow(input));
     if (error) return { error: error.message };
   }
-  refresh();
+  refresh(input.slug);
   return { ok: true };
 }
 
@@ -87,9 +94,16 @@ export async function deleteProduct(id: string): Promise<ActionResult> {
   if (denied) return { error: denied };
 
   const admin = createAdminClient();
+  // Read the slug first so the deleted product's cached page can be purged too.
+  const { data: existing } = await admin
+    .from("products")
+    .select("slug")
+    .eq("id", id)
+    .maybeSingle();
+
   const { error } = await admin.from("products").delete().eq("id", id);
   if (error) return { error: error.message };
-  refresh();
+  refresh(existing?.slug);
   return { ok: true };
 }
 

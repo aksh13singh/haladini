@@ -13,7 +13,9 @@ import { ProductGrid } from "@/components/product/product-grid";
 import { ProductReviews } from "@/components/product/product-reviews";
 import { Separator } from "@/components/ui/separator";
 
-export const dynamic = "force-dynamic";
+// Cached per product and refreshed at most once a minute; admin edits
+// revalidate the affected page immediately.
+export const revalidate = 60;
 
 export async function generateMetadata({
   params,

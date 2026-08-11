@@ -69,6 +69,15 @@ async function withRatings(products: Product[]): Promise<Product[]> {
 }
 
 /**
+ * Columns a product *card* needs. Deliberately excludes description/fabric/care
+ * — those are long text fields, and pulling them for all 76 products made the
+ * catalogue query ~5x slower and the rendered page several hundred KB bigger.
+ * The full row is fetched only on a product's own page.
+ */
+const CARD_COLUMNS =
+  "id,name,slug,price,compare_at_price,category,subcategory,images,sizes,stock,is_new,created_at";
+
+/**
  * All products from Supabase, or null if they can't be read.
  * Memoised per request, so a page that needs the catalogue several times
  * (product + related, grid + ratings) only queries once.
@@ -78,7 +87,7 @@ const fetchAll = cache(async (): Promise<Product[] | null> => {
   try {
     const { data, error } = await publicClient()
       .from("products")
-      .select("*")
+      .select(CARD_COLUMNS)
       .order("created_at", { ascending: false });
     if (error || !data || data.length === 0) return null;
     return data.map(mapRow);
@@ -128,12 +137,29 @@ export async function getProductsByCategory(
   return withRatings(all.filter((p) => p.category === category));
 }
 
-export async function getProductBySlug(
-  slug: string
-): Promise<Product | undefined> {
-  const all = await catalogue();
-  return all.find((p) => p.slug === slug);
-}
+/**
+ * A single product, with its long-form fields. Queried directly by slug rather
+ * than pulling the whole catalogue — a product page has no need for the other
+ * 75 products' data.
+ */
+export const getProductBySlug = cache(
+  async (slug: string): Promise<Product | undefined> => {
+    if (!isSupabaseConfigured) {
+      return sampleProducts.find((p) => p.slug === slug);
+    }
+    try {
+      const { data, error } = await publicClient()
+        .from("products")
+        .select("*")
+        .eq("slug", slug)
+        .maybeSingle();
+      if (error || !data) return undefined;
+      return mapRow(data);
+    } catch {
+      return undefined;
+    }
+  }
+);
 
 export async function getRelatedProducts(
   product: Product,

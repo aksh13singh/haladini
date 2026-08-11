@@ -20,7 +20,9 @@ export const metadata: Metadata = {
 };
 
 // Read fresh product data (New In) from Supabase on each request.
-export const dynamic = "force-dynamic";
+// Cached and re-rendered at most once a minute instead of on every visit.
+// Admin edits call revalidatePath, so changes still appear immediately.
+export const revalidate = 60;
 
 export default function HomePage() {
   return (
