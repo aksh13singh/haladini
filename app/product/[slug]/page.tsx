@@ -4,7 +4,11 @@ import { notFound } from "next/navigation";
 import { ChevronRight, Star } from "lucide-react";
 
 import { categories, siteConfig } from "@/lib/site-config";
-import { getProductBySlug, getRelatedProducts } from "@/lib/products-db";
+import {
+  getAllProductSlugs,
+  getProductBySlug,
+  getRelatedProducts,
+} from "@/lib/products-db";
 import { getProductReviews } from "@/lib/reviews-db";
 import { formatINR } from "@/lib/utils";
 import { ProductGallery } from "@/components/product/product-gallery";
@@ -16,6 +20,16 @@ import { Separator } from "@/components/ui/separator";
 // Cached per product and refreshed at most once a minute; admin edits
 // revalidate the affected page immediately.
 export const revalidate = 60;
+
+/**
+ * Prerender every product page at build time so a shopper gets HTML straight
+ * from the CDN instead of waiting on a render. Products added later are
+ * rendered on first request and then cached (see `revalidate`).
+ */
+export async function generateStaticParams() {
+  const slugs = await getAllProductSlugs();
+  return slugs.map((slug) => ({ slug }));
+}
 
 export async function generateMetadata({
   params,

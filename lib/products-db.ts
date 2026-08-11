@@ -26,10 +26,18 @@ function publicClient() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         auth: { persistSession: false },
-        // Never let Next cache product reads — admin changes must show at once.
+        /*
+         * Let these reads be cached for a minute rather than `no-store`.
+         * `no-store` opts the whole page out of static rendering, which is why
+         * the storefront was re-rendered from scratch on every single visit.
+         * Admin saves call revalidatePath, so edits still appear immediately.
+         */
         global: {
           fetch: (input, init) =>
-            fetch(input, { ...init, cache: "no-store" }),
+            fetch(input, {
+              ...init,
+              next: { revalidate: 60 },
+            } as RequestInit),
         },
       }
     );

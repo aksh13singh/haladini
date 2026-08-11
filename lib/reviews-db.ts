@@ -19,8 +19,11 @@ function publicClient() {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         auth: { persistSession: false },
+        // Cached for a minute — `no-store` would force every page that shows a
+        // rating to render dynamically. New reviews call router.refresh().
         global: {
-          fetch: (input, init) => fetch(input, { ...init, cache: "no-store" }),
+          fetch: (input, init) =>
+            fetch(input, { ...init, next: { revalidate: 60 } } as RequestInit),
         },
       }
     );
