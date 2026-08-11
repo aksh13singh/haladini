@@ -9,6 +9,7 @@ import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { CouponTab } from "@/components/layout/coupon-tab";
 import { CartDrawer } from "@/components/cart/cart-drawer";
+import { SessionReset } from "@/components/account/session-reset";
 import { contact, siteConfig } from "@/lib/site-config";
 
 const poppins = Poppins({
@@ -188,6 +189,7 @@ export default function RootLayout({
         <Footer />
         <CouponTab />
         <CartDrawer />
+        <SessionReset />
       </body>
     </html>
   );

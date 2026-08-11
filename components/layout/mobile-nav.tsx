@@ -10,7 +10,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { HaladiniMark } from "@/components/brand/logo";
+import Image from "next/image";
 import { mainNav, contact } from "@/lib/site-config";
 
 interface MobileNavProps {
@@ -24,7 +24,14 @@ export function MobileNav({ open, onOpenChange }: MobileNavProps) {
       <SheetContent side="left" className="flex w-full flex-col p-0 sm:max-w-xs">
         <SheetHeader className="border-b border-flamingo-tint px-6 py-5">
           <SheetTitle className="flex items-center gap-2 text-wine">
-            <HaladiniMark className="h-6 w-6" />
+            <Image
+              src="/peacock.png"
+              alt=""
+              width={28}
+              height={28}
+              priority
+              className="h-7 w-7 object-contain"
+            />
             Haladini
           </SheetTitle>
         </SheetHeader>

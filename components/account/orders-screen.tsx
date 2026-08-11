@@ -20,7 +20,13 @@ const statusStyle: Record<string, string> = {
 
 export function OrdersScreen() {
   const { user, loading } = useSupabaseUser();
-  const orders = useOrderStore((s) => s.orders);
+  const allOrders = useOrderStore((s) => s.orders);
+
+  // Orders are kept in this browser's storage, so only ever show the ones
+  // belonging to whoever is signed in — never a previous user's history.
+  const orders = user
+    ? allOrders.filter((o) => o.userId === user.id)
+    : [];
 
   if (loading) {
     return <div className="mx-auto h-64 max-w-3xl animate-pulse rounded-3xl bg-flamingo-tint/40" />;

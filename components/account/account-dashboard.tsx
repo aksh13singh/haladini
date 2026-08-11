@@ -13,6 +13,7 @@ import {
 
 import { Button } from "@/components/ui/button";
 import { createClient } from "@/lib/supabase/client";
+import { useCartStore } from "@/store/cart-store";
 import { useWishlistStore } from "@/store/wishlist-store";
 import { useOrderStore } from "@/store/order-store";
 
@@ -30,9 +31,18 @@ export function AccountDashboard({
   const router = useRouter();
   const wishlistCount = useWishlistStore((s) => s.ids.length);
   const orderCount = useOrderStore((s) => s.orders.length);
+  const clearCart = useCartStore((s) => s.clearCart);
+  const clearWishlist = useWishlistStore((s) => s.clear);
+  const clearOrders = useOrderStore((s) => s.clear);
 
   const signOut = async () => {
     await createClient().auth.signOut();
+    // Cart, wishlist and order history live in this browser's storage, not on
+    // the account — so clear them on the way out. Otherwise the next person to
+    // sign in on this device inherits them, including past delivery addresses.
+    clearCart();
+    clearWishlist();
+    clearOrders();
     router.refresh();
   };
 
