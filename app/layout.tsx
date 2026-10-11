@@ -57,6 +57,10 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.name }],
   verification: {
     google: "FUHkGvajexpPQOLgQD8e3WEDDvNAewr-Megt7lyeIf4",
+    other: {
+      // Meta (Facebook) Business Manager domain verification for haladini.in
+      "facebook-domain-verification": "tnoz0uwr0jh2tvn1eky6kr535rsls4",
+    },
   },
   robots: {
     index: true,
